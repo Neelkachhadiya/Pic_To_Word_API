@@ -26,3 +26,29 @@ exports.get_data=async (req,res)=>{
       data
     })
 }
+exports.get_data_api=async(req,res)=>{
+
+  var id=req.params.id;
+
+  var total_data=await user.find().countDocuments();
+  var page_no=req.query.page_no || 1;
+
+  if(page_no==undefined)
+  {
+      page_no=1;
+  }
+  console.log('total data='+page_no)
+
+  var limit=1;
+
+  var t_page=Math.ceil(total_data/limit);
+  var start=(page_no-1)*limit;
+  var data=await user.find().skip(start).limit(limit);
+
+  res.status(200).json({
+      status:"Success data",
+      data,
+      page_no,
+      t_page
+  })
+}
